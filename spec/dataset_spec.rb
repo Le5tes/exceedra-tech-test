@@ -16,7 +16,7 @@ describe Dataset do
 
   subject {described_class.new(data)}
 
-  describe 'group' do
+  describe '#group' do
     it 'returns groups of data from the original set where the product, customer and measure are identical' do
     	expect(subject.group).to eq([
     		[
@@ -40,5 +40,33 @@ describe Dataset do
     	])
     end 
   end
-	
+  
+  describe '#get_pairs_with_overlapping_dates'do
+    it 'returns an array of pairs of rows where the dates overlap, given a group' do
+      data = [
+    			{id: 4,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 5,   Valid_From: 20130101, Valid_To: 20130401},
+				{id: 5,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 6,   Valid_From: 20130301, Valid_To: 20140401},
+				{id: 6,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 7,   Valid_From: 20131231, Valid_To: 20150101}
+			]
+      expect(subject.get_pairs_with_overlapping_dates(data)).to eq([
+      		[
+      			{id: 4,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 5,   Valid_From: 20130101, Valid_To: 20130401},
+				{id: 5,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 6,   Valid_From: 20130301, Valid_To: 20140401}
+      		],
+      		[
+      			{id: 5,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 6,   Valid_From: 20130301, Valid_To: 20140401},
+				{id: 6,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 7,   Valid_From: 20131231, Valid_To: 20150101}
+      		]
+      	])
+    end
+  end
+
+  describe '#daterange(row)' do
+  	it 'returns a the Valid_To and Valid_From values of a row as a range' do
+  	  expect(subject.daterange(
+  	  	{id: 4,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 5,   Valid_From: 20130101, Valid_To: 20130401}
+  	  	))
+  	  .to eq(20130101..20130401) 
+  	end
+  end	
 end
