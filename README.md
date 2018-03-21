@@ -39,4 +39,7 @@ Row ID	Product	Customer	Measure	Value	Valid From Day	Valid To Day
 
 ### use the created sets of data to compare dates and generate pairs of rows
 
+1. Get all combinations of 2 rows within a group
+2. Select those where the dates overlap
+  
 ### for each pair of rows...
