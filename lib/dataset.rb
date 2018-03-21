@@ -7,15 +7,21 @@ class Dataset
 	def group()
 		ids = []
 		groups = []
-		first = @data[0]
+		first = @data.first
 		while first
-			group = @data.select {|row|
-				[row[:Product], row[:Customer], row[:Measure]] == [first[:Product], first[:Customer], first[:Measure]]
-			}
+			group = get_similar(first)
 			group.each {|row| ids.push(row[:id])}
 			groups.push(group)
-			first = @data.select {|row| !ids.include?(row[:id]) }.first
+			first = @data.reject {|row| ids.include?(row[:id]) }.first
 		end
 		return groups
+	end
+
+	private
+
+	def get_similar(compare)
+		@data.select {|row|
+				[row[:Product], row[:Customer], row[:Measure]] == [compare[:Product], compare[:Customer], compare[:Measure]]
+			}
 	end
 end
