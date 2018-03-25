@@ -30,13 +30,12 @@ class Dataset
 	end
 
 	def date_adjust(dates)
-		dates = dates.map {|date_range| (Date.parse(date_range.min.to_s))..(Date.parse(date_range.max.to_s))}
 		if dates[0].min < dates[1].min
-			dates[0] = (dates[0].min)..((dates[1].min) -1)
+			dates[0] = (dates[0].min)..(day_before(dates[1].min))
 		elsif dates[0].min > dates[1].min
-			dates[0] = ((dates[1].max) + 1)..(dates[0].max)
+			dates[0] = (day_after(dates[1].max))..(dates[0].max)
 		end
-		dates = dates.map {|date_range| (date_range.min.to_s.gsub('-', '').to_i)..(date_range.max.to_s.gsub('-', '').to_i)}
+		dates
 	end
 
 	private
@@ -45,6 +44,22 @@ class Dataset
 		@data.select {|row|
 				[row[:Product], row[:Customer], row[:Measure]] == [compare[:Product], compare[:Customer], compare[:Measure]]
 			}
+	end
+
+	def day_before(date)
+		begin
+			(Date.parse(date.to_s) - 1).to_s.gsub('-','').to_i
+		rescue
+			date - 1
+		end
+	end
+
+	def day_after(date)
+		begin
+			(Date.parse(date.to_s) + 1).to_s.gsub('-','').to_i
+		rescue
+			date + 1
+		end
 	end
 
 end
