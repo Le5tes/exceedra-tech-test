@@ -38,6 +38,22 @@ class Dataset
 		dates
 	end
 
+	def adjust_overlapping_dates
+		groups = group
+		groups.each {|group|
+			get_pairs_with_overlapping_dates(group).each{ |pair|
+				i = @data.find_index(pair[0])
+				  range = date_adjust(pair.map{|row|
+						daterange(row)
+					})[0]
+					pair[0][:Valid_From]  = range.min if pair[0][:Valid_From] < range.min
+					pair[0][:Valid_To] = range.max if pair[0][:Valid_To] > range.max
+				@data[i] = pair[0]
+			}
+		}
+		return @data
+	end
+
 	private
 
 	def get_similar(compare)
@@ -61,5 +77,4 @@ class Dataset
 			date + 1
 		end
 	end
-
 end
