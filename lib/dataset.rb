@@ -1,3 +1,4 @@
+require 'date'
 class Dataset
 
 	def initialize(data)
@@ -26,6 +27,12 @@ class Dataset
 
 	def daterange(row)
 		row[:Valid_From]..row[:Valid_To]
+	end
+
+	def date_adjust(dates)
+		dates = dates.map {|date_range| (Date.parse(date_range.min.to_s))..(Date.parse(date_range.max.to_s))}
+		dates[0] = (dates[0].min)..((dates[1].min) -1)
+		dates = dates.map {|date_range| (date_range.min.to_s.gsub('-', '').to_i)..(date_range.max.to_s.gsub('-', '').to_i)}
 	end
 
 	private

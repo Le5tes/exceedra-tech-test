@@ -38,9 +38,9 @@ describe Dataset do
 				{id: 10, Product: 'Widgets', Customer: 'Asda',  Measure: 'Distribution Cost', Value: 3,   Valid_From: 20140401, Valid_To: 20150101}
 			]
     	])
-    end 
+    end
   end
-  
+
   describe '#get_pairs_with_overlapping_dates'do
     it 'returns an array of pairs of rows where the dates overlap, given a group' do
       data = [
@@ -66,7 +66,13 @@ describe Dataset do
   	  expect(subject.daterange(
   	  	{id: 4,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 5,   Valid_From: 20130101, Valid_To: 20130401}
   	  	))
-  	  .to eq(20130101..20130401) 
+  	  .to eq(20130101..20130401)
   	end
-  end	
+  end
+
+  describe '#date_adjust' do
+    it 'adjusts the first date range of a pair so that it no longer overlaps the second' do
+      expect(subject.date_adjust([(20130101..20140101),(20130601..20140303)])).to eq([(20130101..20130531),(20130601..20140303)])
+    end
+  end
 end
