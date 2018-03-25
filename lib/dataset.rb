@@ -1,6 +1,6 @@
 require 'date'
 class Dataset
-
+	attr_reader :data
 	def initialize(data)
 		@data = data
 	end
@@ -8,12 +8,12 @@ class Dataset
 	def group()
 		ids = []
 		groups = []
-		first = @data.first
+		first = data.first
 		while first
 			group = get_similar(first)
 			group.each {|row| ids.push(row[:id])}
 			groups.push(group)
-			first = @data.reject {|row| ids.include?(row[:id]) }.first
+			first = data.reject {|row| ids.include?(row[:id]) }.first
 		end
 		return groups
 	end
@@ -29,16 +29,11 @@ class Dataset
 		groups = group
 		groups.each {|group|
 			get_pairs_with_overlapping_dates(group).each{ |pair|
-				i = @data.find_index(pair[0])
-				  range = date_adjust(pair.map{|row|
-						daterange(row)
-					})[0]
-					pair[0][:Valid_From]  = range.min if pair[0][:Valid_From] < range.min
-					pair[0][:Valid_To] = range.max if pair[0][:Valid_To] > range.max
-				@data[i] = pair[0]
+				i = data.find_index(pair[0])
+				data[i] = adjust_pair(pair)[0]
 			}
 		}
-		return @data
+		return data
 	end
 
 	private
@@ -56,8 +51,17 @@ class Dataset
 		dates
 	end
 
+	def adjust_pair(pair)
+		range = date_adjust(pair.map{|row|
+			daterange(row)
+		})[0]
+		pair[0][:Valid_From]  = range.min if pair[0][:Valid_From] < range.min
+		pair[0][:Valid_To] = range.max if pair[0][:Valid_To] > range.max
+		return pair
+	end
+
 	def get_similar(compare)
-		@data.select {|row|
+		data.select {|row|
 				[row[:Product], row[:Customer], row[:Measure]] == [compare[:Product], compare[:Customer], compare[:Measure]]
 			}
 	end
