@@ -1,4 +1,4 @@
-# exceedra-tech-test
+# Exceedra Tech Test #
 
 ## instructions ##
 
