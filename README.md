@@ -45,11 +45,11 @@ Row ID	Product	Customer	Measure	Value	Valid From Day	Valid To Day
 ### for each pair of rows...
 
 - at this point I need to make a decision as to which of the pair takes precedence over dates.
--- i.e. if the first is from 20130101 to 20130401 and the second is 20130301 to 20130501 does it become 20130101-20130228 and 20130301-20140501 or 20130101-20130401 and 20130402 to 20130501?
--- in this case it seems to make more sense the first way as each service is offered for a period of months, also it would make sense for later entries to overwrite earlier ones. I will follow this pattern for the time being.
--- for rows 7 and 8 it might make sense to turn this into three rows- i.e. [value: 100 from: 00000000 to: 20131230, value: 200 from: 20131231 to: 20150101, value: 100 from: 20150102 to: 99999999], but this seems like too great a change to the table layout for now
--- another option would be to get the average of the overlapping values, but I can't imagine that being meaningful. Also that wouldn't work where one range completely covers another as in rows 7 and 8.
--- all of this only makes sense if we assume the dates were intended to be formatted yyyymmdd, which they all seem to fit to except for row 7.
+   - i.e. if the first is from 20130101 to 20130401 and the second is 20130301 to 20130501 does it become 20130101-20130228 and 20130301-20140501 or 20130101-20130401 and 20130402 to 20130501?
+   - in this case it seems to make more sense the first way as each service is offered for a period of months, also it would make sense for later entries to overwrite earlier ones. I will follow this pattern for the time being.
+   - for rows 7 and 8 it might make sense to turn this into three rows- i.e. [value: 100 from: 00000000 to: 20131230, value: 200 from: 20131231 to: 20150101, value: 100 from: 20150102 to: 99999999], but this seems like too great a change to the table layout for now
+   - another option would be to get the average of the overlapping values, but I can't imagine that being meaningful. Also that wouldn't work where one range completely covers another as in rows 7 and 8.
+   - all of this only makes sense if we assume the dates were intended to be formatted yyyymmdd, which they all seem to fit to except for row 7.
 
 1. adjust the dates of the first row
 2. replace the values in the table with the new values
