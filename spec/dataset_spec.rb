@@ -61,22 +61,22 @@ describe Dataset do
     end
   end
 
-  describe '#daterange(row)' do
-  	it 'returns a the Valid_To and Valid_From values of a row as a range' do
-  	  expect(subject.daterange(
-  	  	{id: 4,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 5,   Valid_From: 20130101, Valid_To: 20130401}
-  	  	))
-  	  .to eq(20130101..20130401)
-  	end
-  end
-
-  describe '#date_adjust' do
-    it 'adjusts the first date range of a pair so that it no longer overlaps the second' do
-      expect(subject.date_adjust([(20130101..20140101),(20130601..20140303)])).to eq([(20130101..20130531),(20130601..20140303)])
-      expect(subject.date_adjust([20130601..20140303,20130101..20140101])).to eq([20140102..20140303,20130101..20140101])
-      expect(subject.date_adjust([00000000..20140101,20130401..20140202])).to eq([00000000..20130331,20130401..20140202])
-    end
-  end
+  # describe '#daterange(row)' do
+  # 	it 'returns a the Valid_To and Valid_From values of a row as a range' do
+  # 	  expect(subject.daterange(
+  # 	  	{id: 4,  Product: 'Widgets', Customer: 'Tesco', Measure: 'Distribution Cost', Value: 5,   Valid_From: 20130101, Valid_To: 20130401}
+  # 	  	))
+  # 	  .to eq(20130101..20130401)
+  # 	end
+  # end
+  #
+  # describe '#date_adjust' do
+  #   it 'adjusts the first date range of a pair so that it no longer overlaps the second' do
+  #     expect(subject.date_adjust([(20130101..20140101),(20130601..20140303)])).to eq([(20130101..20130531),(20130601..20140303)])
+  #     expect(subject.date_adjust([20130601..20140303,20130101..20140101])).to eq([20140102..20140303,20130101..20140101])
+  #     expect(subject.date_adjust([00000000..20140101,20130401..20140202])).to eq([00000000..20130331,20130401..20140202])
+  #   end
+  # end
 
   describe '#adjust_overlapping_dates' do
     it 'identifies pairs of rows with identical products, customers and measures, and overlapping date ranges and adjusts the dates so they no longer overlap, returning the data' do

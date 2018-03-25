@@ -25,19 +25,6 @@ class Dataset
 							}
 	end
 
-	def daterange(row)
-		row[:Valid_From]..row[:Valid_To]
-	end
-
-	def date_adjust(dates)
-		if dates[0].min < dates[1].min
-			dates[0] = (dates[0].min)..(day_before(dates[1].min))
-		elsif dates[0].min > dates[1].min
-			dates[0] = (day_after(dates[1].max))..(dates[0].max)
-		end
-		dates
-	end
-
 	def adjust_overlapping_dates
 		groups = group
 		groups.each {|group|
@@ -55,6 +42,19 @@ class Dataset
 	end
 
 	private
+
+	def daterange(row)
+		row[:Valid_From]..row[:Valid_To]
+	end
+
+	def date_adjust(dates)
+		if dates[0].min < dates[1].min
+			dates[0] = (dates[0].min)..(day_before(dates[1].min))
+		elsif dates[0].min > dates[1].min
+			dates[0] = (day_after(dates[1].max))..(dates[0].max)
+		end
+		dates
+	end
 
 	def get_similar(compare)
 		@data.select {|row|
